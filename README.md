@@ -22,7 +22,8 @@ Create the following files within this directory:
 - `nginx/default.conf`
 
 ## Step 2: Edit the `compose.yaml` File
-This file defines the services used in our setup:
+This file defines the services used in our setup.
+**Note**: In this configuration, no ports from the Cat container are exposed to the host system. Communication between the Cat and NGINX containers occurs exclusively within the default Docker bridge network, ensuring an isolated internal connection.
 
 ```yaml
 services:
