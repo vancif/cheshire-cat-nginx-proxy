@@ -88,6 +88,41 @@ server {
         return 301 https://mydomain.org$request_uri;
     }
 }
+```
+
+## Step 5: Request an SSL Certificate
+Start the services (excluding certbot):
+
+```bash
+docker compose up -d nginx cheshire-cat-core
+```
+Request an SSL certificate using Certbot:
+```bash
+docker compose run --rm  certbot certonly --webroot --webroot-path /var/www/certbot/ -d mydomain.org
+```
+
+## Step 6: update the NGINX configuration for https
+Edit the `./nginx/default.conf` file to include the SSL configuration (**remember**: replace `mydomain.org` with the real domain!!!)
+
+```
+server {
+    listen       80;
+    listen  [::]:80;
+    server_name  mydomain.org;
+    server_tokens off;
+
+    location / {
+        return 301 https://mydomain.org$request_uri;
+    }
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location /ws {
+        return 301 https://mydomain.org$request_uri;
+    }
+}
 
 server {
     listen 443 default_server ssl http2;
@@ -116,23 +151,11 @@ server {
 }
 ```
 
-## Step 5: Request an SSL Certificate
-Start the services (excluding certbot):
-
-```bash
-$ docker compose up -d nginx cheshire-cat-core
-```
-Request an SSL certificate using Certbot:
-```bash
-$ docker compose run --rm  certbot certonly --webroot --webroot-path /var/www/certbot/ -d mydomain.org`
-```
-
-## Step 6: Restart NGINX with SSL Configuration
+## Step 7: Restart NGINX with SSL Configuration
 Restart the NGINX service to apply the SSL configuration:
 ```bash
 docker compose restart nginx
 ```
-and then restart NGINX
 
 ## To Renew the SSL certificate
 The Let'sEncrypt certificates expired in 3 month. Before expiration run
