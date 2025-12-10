@@ -65,6 +65,10 @@ These environment variables tell the Cat how to behave when behind a proxy
 CCAT_CORE_HOST=mydomain.org
 CCAT_CORE_USE_SECURE_PROTOCOLS=true
 CCAT_HTTPS_PROXY_MODE=true
+# next env vars are suggested to secure the installation as reported https://cheshire-cat-ai.github.io/docs/production/auth/authentication/
+CCAT_API_KEY=a-very-long-and-alphanumeric-secret
+CCAT_API_KEY_WS=another-very-long-and-alphanumeric-secret
+CCAT_JWT_SECRET=yet-another-very-long-and-alphanumeric-secret
 ```
 
 ## Step 4: Set Up NGINX Configuration in `./nginx/default.conf`
